@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Even on my silent days you're always in my heart</title>
+<style>
+  body {margin:0;background:#ADD8E6;font-family:'Georgia',serif;display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;}
+  canvas#hearts{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+  .book-container{width:600px;height:400px;perspective:2000px;position:relative;z-index:1;}
+  .book{width:100%;height:100%;position:relative;transform-style:preserve-3d;}
+  .page{width:100%;height:100%;position:absolute;top:0;left:0;background:#bf8334;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.3);display:flex;justify-content:center;align-items:center;text-align:center;padding:20px;transform-origin:left;transition:transform 1s ease,z-index 0.3s ease;backface-visibility:hidden;}
+  .page img{max-width:100%;max-height:100%;border-radius:10px;object-fit:contain;}
+  .page h1{font-size:24px;color:#D4D1BA;}
+  .page p{font-size:16px;color:#555;}
+  .cover{background:linear-gradient(135deg,#bf8334,#cc9f64);color:white;font-size:22px;font-weight:bold;cursor:pointer;z-index:20;transform-origin:left;}
+  .flipped{transform:rotateY(-180deg);z-index:0 !important;box-shadow:inset -5px 0 15px rgba(0,0,0,0.2);}
+  button{position:absolute;bottom:20px;padding:10px 20px;border:none;background:#e3cb8f;color:white;border-radius:5px;cursor:pointer;z-index:2;}
+  #next{right:20px;}#prev{left:20px;}
+</style>
+</head>
+<body>
+<canvas id="hearts"></canvas>
+<div class="book-container">
+  <div class="book" id="book">
+    <div class="page cover" id="page0">
+      <div>
+        (っ˶ ˘ ᵕ˘)💜ˆᵕ ˆ˶ς)<br><br>
+        Even on my silent days,<br>
+        you're always in my heart  ⭑⚝💜✮⋆˙<br><br>
+        <small>(Click to open)</small>
+      </div>
+    </div>
+    <div class="page" id="page1">
+      <div>
+        <h1>My Message 💌</h1>
+        <p>
+          Even on the days I go quiet,<br>
+          even when words fail me…<br>
+          please know that you are always in my heart.<br><br>
+          You are my calm, my comfort,<br>
+          and the thought I hold onto<br>
+          when everything feels heavy.<br><br>
+          I may not always say it,<br>
+          but I feel it—every single day. 💜
+        </p>
+      </div>
+    </div>
+    <div class="page"><img src="first.jpg"></div>
+    <div class="page"><img src="second.jpg"></div>
+    <div class="page"><img src="third.jpg"></div>
+    <div class="page"><img src="fourth.jpg"></div>
+    <div class="page"><img src="IMG20260218161707.jpg"></div>
+    <div class="page"><img src="IMG20260314190713.jpg"></div>
+    <div class="page" id="pageLast"><h1>I Love You 💜</h1></div>
+  </div>
+</div>
+<button id="prev">←</button>
+<button id="next">→</button>
+<audio id="bgMusic" loop>
+  <source src="Infrunami.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const pages=document.querySelectorAll('.book .page');let currentPage=0;
+document.body.addEventListener("click",()=>{const music=document.getElementById("bgMusic");music.play().catch(()=>{});},{once:true});
+pages.forEach((p,i)=>p.style.zIndex=pages.length-i);
+function flipPage(index){pages.forEach((p,i)=>{if(i<=index){p.classList.add('flipped');p.style.zIndex=i;}else{p.classList.remove('flipped');p.style.zIndex=pages.length-i;}})}
+document.getElementById('next').onclick=()=>{if(currentPage<pages.length-1){currentPage++;flipPage(currentPage);}};
+document.getElementById('prev').onclick=()=>{if(currentPage>0){currentPage--;flipPage(currentPage);}};
+document.getElementById('page0').onclick=()=>{currentPage=1;flipPage(currentPage);};
+
+// Falling brown hearts
+const canvas=document.getElementById('hearts');const ctx=canvas.getContext('2d');
+let width=canvas.width=window.innerWidth,height=canvas.height=window.innerHeight;
+window.addEventListener('resize',()=>{width=canvas.width=window.innerWidth;height=canvas.height=window.innerHeight;});
+const hearts=[];for(let i=0;i<80;i++){hearts.push({x:Math.random()*width,y:Math.random()*height,size:10+Math.random()*15,speed:1+Math.random()*2,angle:Math.random()*Math.PI/4});}
+function drawHeart(ctx,x,y,size,color){ctx.save();ctx.beginPath();const t=size*0.3;ctx.moveTo(x,y+t);ctx.bezierCurveTo(x,y,x-size/2,y,x-size/2,y+t);ctx.bezierCurveTo(x-size/2,y+(size+t)/2,x,y+(size+t)/1.5,x,y+size);ctx.bezierCurveTo(x,y+(size+t)/1.5,x+size/2,y+(size+t)/2,x+size/2,y+t);ctx.bezierCurveTo(x+size/2,y,x,y,x,y+t);ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.restore();}
+function animateHearts(){ctx.clearRect(0,0,width,height);hearts.forEach(h=>{drawHeart(ctx,h.x,h.y,h.size,'#8B4513');h.x+=h.speed*Math.cos(h.angle);h.y+=h.speed*Math.sin(h.angle);if(h.y>height||h.x>width){h.x=Math.random()*width;h.y=-20;h.size=10+Math.random()*15;h.speed=1+Math.random()*2;h.angle=Math.random()*Math.PI/4;}});requestAnimationFrame(animateHearts);}
+animateHearts();
+</script>
+</body>
+</html>
